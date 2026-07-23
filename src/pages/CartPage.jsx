@@ -13,7 +13,7 @@ import {
 } from '../store/cartSlice';
 import './CartPage.css';
 
-function CartPage({ onReturnHome }) {
+function CartPage({ onReturnHome, onRegister }) {
   const dispatch = useDispatch();
   const { items, subtotal, tax, discount, couponCode, totalItems, grandTotal } = useSelector(
     (state) => state.cart,
@@ -113,7 +113,9 @@ function CartPage({ onReturnHome }) {
             <span>About</span>
           </nav>
           <div className="cartly-header__actions">
-            <span>Register</span>
+            <button type="button" className="cartly-link" onClick={onRegister}>
+              Register
+            </button>
             <span className="cartly-cart-icon" aria-label={`Cart with ${totalItems} items`}>
               🛒
               {totalItems > 0 && <span className="cartly-badge">{totalItems}</span>}

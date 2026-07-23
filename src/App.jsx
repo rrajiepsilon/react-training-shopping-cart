@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import CartPage from './pages/CartPage';
+import RegisterPage from './pages/RegisterPage';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
 
   if (activeTab === 'cart') {
-    return <CartPage onReturnHome={() => setActiveTab('home')} />;
+    return (
+      <CartPage
+        onReturnHome={() => setActiveTab('home')}
+        onRegister={() => setActiveTab('register')}
+      />
+    );
+  }
+
+  if (activeTab === 'register') {
+    return (
+      <RegisterPage
+        onCancel={() => setActiveTab('home')}
+        onGoHome={() => setActiveTab('home')}
+        onGoCart={() => setActiveTab('cart')}
+      />
+    );
   }
 
   return (
@@ -27,6 +43,13 @@ function App() {
             onClick={() => setActiveTab('cart')}
           >
             Cart
+          </button>
+          <button
+            type="button"
+            className={activeTab === 'register' ? 'active' : ''}
+            onClick={() => setActiveTab('register')}
+          >
+            Register
           </button>
         </nav>
       </header>

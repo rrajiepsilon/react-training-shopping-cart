@@ -43,6 +43,21 @@
   font-size: 0.95rem;
 }
 
+.cartly-nav button.cartly-link,
+.cartly-header__actions button.cartly-link {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cartly-nav button.cartly-link:hover,
+.cartly-header__actions button.cartly-link:hover {
+  color: #fff;
+}
+
 .cartly-cart-icon {
   position: relative;
   font-size: 1.1rem;
