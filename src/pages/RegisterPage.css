@@ -1,0 +1,144 @@
+.register-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.register-card {
+  width: min(100%, 560px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.06);
+  padding: 1.75rem 1.75rem 1.5rem;
+}
+
+.register-card__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.register-card__subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.register-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.register-row--half {
+  grid-template-columns: 1fr 1fr;
+}
+
+.register-row--half .register-field:last-child {
+  grid-column: 1;
+}
+
+.register-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0.35rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.register-section span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.register-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.register-field input,
+.register-field select {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+}
+
+.register-field input::placeholder {
+  color: #9ca3af;
+}
+
+.register-field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1.41 0 6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+.register-field select:invalid,
+.register-field select.placeholder {
+  color: #9ca3af;
+}
+
+.register-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.register-actions .btn {
+  width: 100%;
+}
+
+.register-success {
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+}
+
+.register-success h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+}
+
+.register-success p {
+  margin: 0 0 1.25rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .register-card {
+    padding: 1.25rem;
+  }
+
+  .register-row,
+  .register-row--half,
+  .register-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .register-row--half .register-field:last-child {
+    grid-column: auto;
+  }
+}

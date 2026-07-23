@@ -13,7 +13,7 @@ import {
 } from '../store/cartSlice';
 import './CartPage.css';
 
-function CartPage({ onReturnHome }) {
+function CartPage({ onReturnHome, onRegister }) {
   const dispatch = useDispatch();
   const { items, subtotal, tax, discount, couponCode, totalItems, grandTotal } = useSelector(
     (state) => state.cart,
