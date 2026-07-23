@@ -1,65 +1,24 @@
-import { useState } from 'react';
-import CartPage from './pages/CartPage';
-import RegisterPage from './pages/RegisterPage';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 
-function App() {
-  const [activeTab, setActiveTab] = useState('home');
 
-  if (activeTab === 'cart') {
-    return (
-      <CartPage
-        onReturnHome={() => setActiveTab('home')}
-        onRegister={() => setActiveTab('register')}
-      />
-    );
-  }
-
-  if (activeTab === 'register') {
-    return (
-      <RegisterPage
-        onCancel={() => setActiveTab('home')}
-        onGoHome={() => setActiveTab('home')}
-        onGoCart={() => setActiveTab('cart')}
-      />
-    );
-  }
-
+export default function App() {
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>React Training</h1>
-        <nav className="app-nav">
-          <button
-            type="button"
-            className={activeTab === 'home' ? 'active' : ''}
-            onClick={() => setActiveTab('home')}
-          >
-            Home
-          </button>
-          <button
-            type="button"
-            className={activeTab === 'cart' ? 'active' : ''}
-            onClick={() => setActiveTab('cart')}
-          >
-            Cart
-          </button>
-          <button
-            type="button"
-            className={activeTab === 'register' ? 'active' : ''}
-            onClick={() => setActiveTab('register')}
-          >
-            Register
-          </button>
-        </nav>
-      </header>
+    <div className="app-shell">
+      <Header />
 
-      <main className="app-main">
-        <h2>Course Home</h2>
-        <p>Welcome to the React Training course. Use the navigation above to open the shopping cart demo.</p>
-      </main>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+
+      <Footer />
     </div>
   );
 }
 
-export default App;

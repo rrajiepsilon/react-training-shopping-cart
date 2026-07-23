@@ -128,30 +128,6 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
 
   return (
     <div className="cartly">
-      <header className="cartly-header">
-        <div className="cartly-header__inner">
-          <span className="cartly-logo">Cartly</span>
-          <nav className="cartly-nav" aria-label="Main navigation">
-            <button type="button" className="cartly-link" onClick={onGoHome}>
-              Home
-            </button>
-            <span>Deals</span>
-            <span>About</span>
-          </nav>
-          <div className="cartly-header__actions">
-            <span>Register</span>
-            <button
-              type="button"
-              className="cartly-cart-icon cartly-link"
-              onClick={onGoCart}
-              aria-label="Go to cart"
-            >
-              🛒
-            </button>
-          </div>
-        </div>
-      </header>
-
       <main className="cartly-main register-main">
         <div className="register-card">
           {success ? (

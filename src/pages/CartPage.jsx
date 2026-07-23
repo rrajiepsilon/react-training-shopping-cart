@@ -104,26 +104,6 @@ function CartPage({ onReturnHome, onRegister }) {
 
   return (
     <div className="cartly">
-      <header className="cartly-header">
-        <div className="cartly-header__inner">
-          <span className="cartly-logo">Cartly</span>
-          <nav className="cartly-nav" aria-label="Main navigation">
-            <span>Home</span>
-            <span>Deals</span>
-            <span>About</span>
-          </nav>
-          <div className="cartly-header__actions">
-            <button type="button" className="cartly-link" onClick={onRegister}>
-              Register
-            </button>
-            <span className="cartly-cart-icon" aria-label={`Cart with ${totalItems} items`}>
-              🛒
-              {totalItems > 0 && <span className="cartly-badge">{totalItems}</span>}
-            </span>
-          </div>
-        </div>
-      </header>
-
       <main className="cartly-main">
         {loading && (
           <div className="cartly-state">
@@ -238,11 +218,6 @@ function CartPage({ onReturnHome, onRegister }) {
           </div>
         )}
       </main>
-
-      <footer className="cartly-footer">
-        Data from fakestoreapi.com — internal POC
-      </footer>
-
       {showCheckout && <CheckoutForm onClose={() => setShowCheckout(false)} />}
     </div>
   );
