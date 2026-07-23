@@ -218,11 +218,6 @@ function CartPage({ onReturnHome }) {
           </div>
         )}
       </main>
-
-      <footer className="cartly-footer">
-        Data from fakestoreapi.com — internal POC
-      </footer>
-
       {showCheckout && <CheckoutForm onClose={() => setShowCheckout(false)} />}
     </div>
   );
