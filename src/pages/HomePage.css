@@ -73,15 +73,6 @@
   }
 }
 
-.error-banner {
-  background: #fdf1f0;
-  border: 1px solid #f0c9c6;
-  color: var(--color-danger);
-  border-radius: var(--radius);
-  padding: 14px;
-  font-size: 13px;
-}
-
 .empty-state {
   text-align: center;
   color: var(--color-text-muted);

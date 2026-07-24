@@ -101,3 +101,11 @@ button {
   border-color: var(--color-border);
 }
 
+.error-banner {
+  background: #fdf1f0;
+  border: 1px solid #f0c9c6;
+  color: var(--color-danger);
+  border-radius: var(--radius);
+  padding: 14px;
+  font-size: 13px;
+}
