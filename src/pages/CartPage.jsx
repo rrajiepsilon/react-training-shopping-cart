@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchCart, fetchProducts } from '../api';
 import CartItem from '../components/CartItem';
-import CheckoutForm from '../components/CheckoutForm';
 import {
   applyCoupon,
   decreaseQuantity,
@@ -15,6 +15,7 @@ import './CartPage.css';
 
 function CartPage({ onReturnHome, onRegister }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, subtotal, tax, discount, couponCode, totalItems, grandTotal } = useSelector(
     (state) => state.cart,
   );
@@ -24,7 +25,6 @@ function CartPage({ onReturnHome, onRegister }) {
   const [search, setSearch] = useState('');
   const [couponInput, setCouponInput] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
-  const [showCheckout, setShowCheckout] = useState(false);
 
   const loadCart = useCallback(async () => {
     setLoading(true);
@@ -207,7 +207,7 @@ function CartPage({ onReturnHome, onRegister }) {
               <button
                 type="button"
                 className="btn btn-primary btn-block"
-                onClick={() => setShowCheckout(true)}
+                onClick={() => navigate('/checkout')}
               >
                 Proceed to Checkout
               </button>
@@ -218,7 +218,6 @@ function CartPage({ onReturnHome, onRegister }) {
           </div>
         )}
       </main>
-      {showCheckout && <CheckoutForm onClose={() => setShowCheckout(false)} />}
     </div>
   );
 }

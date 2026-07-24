@@ -82,6 +82,11 @@ const cartSlice = createSlice({
       state.couponCode = code === 'SAVE10' || code === 'FLAT20' ? code : '';
       refreshTotals(state);
     },
+    clearCart(state) {
+      state.items = [];
+      state.couponCode = '';
+      refreshTotals(state);
+    },
   },
 });
 
@@ -92,6 +97,7 @@ export const {
   increaseQuantity,
   decreaseQuantity,
   applyCoupon,
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

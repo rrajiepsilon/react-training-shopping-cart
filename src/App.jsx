@@ -3,6 +3,7 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import CartPage from "./pages/CartPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
 
