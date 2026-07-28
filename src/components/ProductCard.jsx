@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import StarRating from "./StarRating.jsx";
+import { useCartStore } from "../store/useCartStore.js";
 import "./ProductCard.css";
 
 export default function ProductCard({ product }) {
-  
+  const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = (e) => {
-    e.preventDefault(); // don't follow the Link when clicking the button
-    
+    e.preventDefault();
+    addItem(product);
   };
 
   return (

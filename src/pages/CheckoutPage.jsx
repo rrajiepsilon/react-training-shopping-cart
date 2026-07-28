@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { clearCart } from "../store/cartSlice.js";
+import { useCartStore } from "../store/useCartStore.js";
 import "./CheckoutPage.css";
 
 const SHIPPING = 4.99;
@@ -28,9 +27,10 @@ function getEstimatedDeliveryDate() {
 }
 
 export default function CheckoutPage() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, subtotal } = useSelector((state) => state.cart);
+  const items = useCartStore((state) => state.items);
+  const subtotal = useCartStore((state) => state.subtotal);
+  const clearCart = useCartStore((state) => state.clearCart);
   const [paymentMethod, setPaymentMethod] = useState("card");
 
   const tax = subtotal * TAX_RATE;
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
   const handlePlaceOrder = () => {
     // POC placeholder — wire this up to a real order-creation API later
     alert("Order placed! Thanks for shopping with Cartly.");
-    dispatch(clearCart());
+    clearCart();
     navigate("/");
   };
 

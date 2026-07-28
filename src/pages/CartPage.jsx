@@ -1,58 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchCart, fetchProducts } from '../api';
 import CartItem from '../components/CartItem';
-import {
-  applyCoupon,
-  decreaseQuantity,
-  hydrateCart,
-  increaseQuantity,
-  removeItem,
-  SHIPPING_COST,
-} from '../store/cartSlice';
+import { SHIPPING_COST, useCartStore } from '../store/useCartStore';
 import './CartPage.css';
 
-function CartPage({ onReturnHome, onRegister }) {
-  const dispatch = useDispatch();
+function CartPage() {
   const navigate = useNavigate();
-  const { items, subtotal, tax, discount, couponCode, totalItems, grandTotal } = useSelector(
-    (state) => state.cart,
-  );
+  const items = useCartStore((state) => state.items);
+  const subtotal = useCartStore((state) => state.subtotal);
+  const tax = useCartStore((state) => state.tax);
+  const discount = useCartStore((state) => state.discount);
+  const couponCode = useCartStore((state) => state.couponCode);
+  const totalItems = useCartStore((state) => state.totalItems);
+  const grandTotal = useCartStore((state) => state.grandTotal);
+  const increaseQuantity = useCartStore((state) => state.increaseQuantity);
+  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const applyCoupon = useCartStore((state) => state.applyCoupon);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [couponInput, setCouponInput] = useState('');
   const [couponMessage, setCouponMessage] = useState('');
-
-  const loadCart = useCallback(async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const [cartData, products] = await Promise.all([fetchCart(), fetchProducts()]);
-      const productMap = Object.fromEntries(products.map((product) => [product.id, product]));
-
-      const hydratedItems = cartData.products
-        .map(({ productId, quantity }) => {
-          const product = productMap[productId];
-          if (!product) return null;
-          return { ...product, quantity };
-        })
-        .filter(Boolean);
-
-      dispatch(hydrateCart(hydratedItems));
-    } catch (err) {
-      setError(err.message || 'Failed to load cart data.');
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    loadCart();
-  }, [loadCart]);
 
   const filteredItems = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -66,18 +34,18 @@ function CartPage({ onReturnHome, onRegister }) {
   }, [items, search]);
 
   const handleIncrease = useCallback(
-    (id) => dispatch(increaseQuantity(id)),
-    [dispatch],
+    (id) => increaseQuantity(id),
+    [increaseQuantity],
   );
 
   const handleDecrease = useCallback(
-    (id) => dispatch(decreaseQuantity(id)),
-    [dispatch],
+    (id) => decreaseQuantity(id),
+    [decreaseQuantity],
   );
 
   const handleRemove = useCallback(
-    (id) => dispatch(removeItem(id)),
-    [dispatch],
+    (id) => removeItem(id),
+    [removeItem],
   );
 
   const handleApplyCoupon = (event) => {
@@ -94,7 +62,7 @@ function CartPage({ onReturnHome, onRegister }) {
       return;
     }
 
-    dispatch(applyCoupon(code));
+    applyCoupon(code);
     setCouponMessage(
       code === 'SAVE10' ? '10% discount applied.' : '$20 discount applied.',
     );
@@ -105,32 +73,17 @@ function CartPage({ onReturnHome, onRegister }) {
   return (
     <div className="cartly">
       <main className="cartly-main">
-        {loading && (
-          <div className="cartly-state">
-            <p>Loading your cart...</p>
-          </div>
-        )}
-
-        {!loading && error && (
-          <div className="cartly-state">
-            <p>{error}</p>
-            <button type="button" className="btn btn-primary" onClick={loadCart}>
-              Retry
-            </button>
-          </div>
-        )}
-
-        {!loading && !error && items.length === 0 && (
+        {items.length === 0 && (
           <div className="cartly-state">
             <h2>Your cart is empty</h2>
             <p>Add items to get started.</p>
-            <button type="button" className="btn btn-secondary" onClick={onReturnHome}>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
               Return to Home
             </button>
           </div>
         )}
 
-        {!loading && !error && items.length > 0 && (
+        {items.length > 0 && (
           <div className="cartly-layout">
             <section className="cartly-items">
               <div className="cartly-items__heading">
@@ -211,7 +164,7 @@ function CartPage({ onReturnHome, onRegister }) {
               >
                 Proceed to Checkout
               </button>
-              <button type="button" className="btn btn-secondary btn-block" onClick={onReturnHome}>
+              <button type="button" className="btn btn-secondary btn-block" onClick={() => navigate('/')}>
                 Return to Home
               </button>
             </aside>
