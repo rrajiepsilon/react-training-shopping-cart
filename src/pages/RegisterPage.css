@@ -72,6 +72,18 @@
   color: #111827;
 }
 
+.register-field__label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.register-field__required {
+  color: #dc2626;
+  font-weight: 600;
+  line-height: 1;
+}
+
 .register-field input,
 .register-field select {
   font: inherit;
@@ -99,6 +111,17 @@
 .register-field select:invalid,
 .register-field select.placeholder {
   color: #9ca3af;
+}
+
+.register-submit-error {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
 }
 
 .register-actions {

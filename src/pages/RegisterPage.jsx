@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../api';
+import { US_STATES } from '../constants/states';
 import {
   validateAge,
   validateAddress,
@@ -12,59 +15,6 @@ import {
 } from '../utils/validation';
 import './CartPage.css';
 import './RegisterPage.css';
-
-const US_STATES = [
-  'Alabama',
-  'Alaska',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'Florida',
-  'Georgia',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Pennsylvania',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming',
-];
 
 const initialForm = {
   firstName: '',
@@ -94,11 +44,27 @@ const validators = {
   zip: validateZip,
 };
 
-function RegisterPage({ onCancel, onGoHome, onGoCart }) {
+function FieldLabel({ children, required = true }) {
+  return (
+    <span className="register-field__label">
+      {children}
+      {required && (
+        <span className="register-field__required" aria-hidden="true">
+          *
+        </span>
+      )}
+    </span>
+  );
+}
+
+function RegisterPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
   const [touched, setTouched] = useState(initialTouched);
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const errors = Object.fromEntries(
     Object.entries(validators).map(([field, validate]) => [field, validate(form[field])]),
@@ -116,14 +82,24 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
     setTouched((current) => ({ ...current, [name]: true }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitted(true);
 
     const hasErrors = Object.values(errors).some(Boolean);
     if (hasErrors) return;
 
-    setSuccess(true);
+    setSubmitting(true);
+    setSubmitError('');
+
+    try {
+      await registerUser(form);
+      setSuccess(true);
+    } catch (err) {
+      setSubmitError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -136,7 +112,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
               <p>
                 Welcome, {form.firstName}. Your Cartly account has been registered successfully.
               </p>
-              <button type="button" className="btn btn-primary" onClick={onCancel}>
+              <button type="button" className="btn btn-primary" onClick={() => navigate('/')}>
                 Continue
               </button>
             </div>
@@ -148,7 +124,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
               <form className="register-form" onSubmit={handleSubmit} noValidate>
                 <div className="register-row">
                   <label className="register-field">
-                    First name
+                    <FieldLabel>First name</FieldLabel>
                     <input
                       type="text"
                       name="firstName"
@@ -157,6 +133,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="given-name"
+                      aria-required="true"
                     />
                     {showError('firstName') && (
                       <span className="field-error">{errors.firstName}</span>
@@ -164,7 +141,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                   </label>
 
                   <label className="register-field">
-                    Last name
+                    <FieldLabel>Last name</FieldLabel>
                     <input
                       type="text"
                       name="lastName"
@@ -173,6 +150,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="family-name"
+                      aria-required="true"
                     />
                     {showError('lastName') && <span className="field-error">{errors.lastName}</span>}
                   </label>
@@ -180,7 +158,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
 
                 <div className="register-row">
                   <label className="register-field">
-                    Age
+                    <FieldLabel>Age</FieldLabel>
                     <input
                       type="number"
                       name="age"
@@ -190,12 +168,13 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       value={form.age}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      aria-required="true"
                     />
                     {showError('age') && <span className="field-error">{errors.age}</span>}
                   </label>
 
                   <label className="register-field">
-                    Phone
+                    <FieldLabel>Phone</FieldLabel>
                     <input
                       type="tel"
                       name="phone"
@@ -204,13 +183,14 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="tel"
+                      aria-required="true"
                     />
                     {showError('phone') && <span className="field-error">{errors.phone}</span>}
                   </label>
                 </div>
 
                 <label className="register-field">
-                  Email
+                  <FieldLabel>Email</FieldLabel>
                   <input
                     type="email"
                     name="email"
@@ -219,6 +199,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     autoComplete="email"
+                    aria-required="true"
                   />
                   {showError('email') && <span className="field-error">{errors.email}</span>}
                 </label>
@@ -228,7 +209,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                 </div>
 
                 <label className="register-field">
-                  Address line 1
+                  <FieldLabel>Address line 1</FieldLabel>
                   <input
                     type="text"
                     name="address1"
@@ -237,12 +218,13 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     autoComplete="address-line1"
+                    aria-required="true"
                   />
                   {showError('address1') && <span className="field-error">{errors.address1}</span>}
                 </label>
 
                 <label className="register-field">
-                  Address line 2
+                  <FieldLabel required={false}>Address line 2</FieldLabel>
                   <input
                     type="text"
                     name="address2"
@@ -256,7 +238,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
 
                 <div className="register-row">
                   <label className="register-field">
-                    City
+                    <FieldLabel>City</FieldLabel>
                     <input
                       type="text"
                       name="city"
@@ -265,12 +247,13 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="address-level2"
+                      aria-required="true"
                     />
                     {showError('city') && <span className="field-error">{errors.city}</span>}
                   </label>
 
                   <label className="register-field">
-                    State
+                    <FieldLabel>State</FieldLabel>
                     <select
                       name="state"
                       value={form.state}
@@ -279,6 +262,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       className={!form.state ? 'placeholder' : ''}
                       autoComplete="address-level1"
                       required
+                      aria-required="true"
                     >
                       <option value="" disabled>
                         California
@@ -295,7 +279,7 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
 
                 <div className="register-row register-row--half">
                   <label className="register-field">
-                    Zip code
+                    <FieldLabel>Zip code</FieldLabel>
                     <input
                       type="text"
                       name="zip"
@@ -304,16 +288,28 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       autoComplete="postal-code"
+                      aria-required="true"
                     />
                     {showError('zip') && <span className="field-error">{errors.zip}</span>}
                   </label>
                 </div>
 
+                {submitError && (
+                  <p className="register-submit-error" role="alert">
+                    {submitError}
+                  </p>
+                )}
+
                 <div className="register-actions">
-                  <button type="submit" className="btn btn-primary">
-                    Register
+                  <button type="submit" className="btn btn-primary" disabled={submitting}>
+                    {submitting ? 'Registering…' : 'Register'}
                   </button>
-                  <button type="button" className="btn btn-secondary" onClick={onCancel}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/')}
+                    disabled={submitting}
+                  >
                     Cancel
                   </button>
                 </div>
@@ -322,8 +318,6 @@ function RegisterPage({ onCancel, onGoHome, onGoCart }) {
           )}
         </div>
       </main>
-
-      <footer className="cartly-footer">Data from fakestoreapi.com — internal POC</footer>
     </div>
   );
 }
