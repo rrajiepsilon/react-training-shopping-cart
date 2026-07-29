@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
 
-/**
- * Reusable data-fetching hook.
- * Re-fetches whenever `url` changes. Returns { data, loading, error }.
- */
 export function useFetch(url) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);

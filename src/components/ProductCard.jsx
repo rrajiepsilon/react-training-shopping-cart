@@ -22,9 +22,9 @@ export default function ProductCard({ product }) {
         <StarRating rate={product.rating.rate} count={product.rating.count} />
         <div className="product-card-footer">
           <span className="product-card-price">${product.price.toFixed(2)}</span>
-          <button className="btn btn-primary product-card-btn" onClick={handleAddToCart}>
+          {/* <button className="btn btn-primary product-card-btn" onClick={handleAddToCart}>
             Add to cart
-          </button>
+          </button> */}
         </div>
       </div>
     </Link>
