@@ -1,13 +1,12 @@
 import { useParams, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useFetch } from "../hooks/useFetch.js";
 import StarRating from "../components/StarRating.jsx";
-import { addItem } from "../store/cartSlice.js";
+import { useCartStore } from "../store/useCartStore.js";
 import "./ProductDetails.css";
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const addItem = useCartStore((state) => state.addItem);
   const { data: product, loading, error } = useFetch(
     `https://fakestoreapi.com/products/${id}`
   );
@@ -26,7 +25,7 @@ export default function ProductDetails() {
           <StarRating rate={product.rating.rate} count={product.rating.count} />
           <p className="product-price">${product.price.toFixed(2)}</p>
           <p>{product.description}</p>
-          <button className="btn btn-primary" onClick={() => dispatch(addItem(product))}>
+          <button className="btn btn-primary" onClick={() => addItem(product)}>
             Add to cart
           </button>
         </div>
