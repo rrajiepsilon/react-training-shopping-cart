@@ -13,9 +13,20 @@ export default function ProductDetails() {
   );
 
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false); 
 
   const decrement = () => setQuantity((q) => Math.max(1, q - 1));
   const increment = () => setQuantity((q) => q + 1);
+
+  const handleAddToCart = () => {
+    addItem(product, quantity);
+    setIsAdded(true);
+  
+    // Reset after 1.5 seconds
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 1500);
+  };
 
   if (loading) return <div className="page-content">Loading...</div>;
   if (error) return <div className="page-content error-banner">Couldn't load product.</div>;
@@ -45,9 +56,13 @@ export default function ProductDetails() {
             </div>
           </div>
 
-          <button className="btn btn-primary" onClick={() => addItem(product,quantity)}>
-            Add to cart
-          </button>
+          <button
+              className={`btn btn-primary ${isAdded ? "btn-added" : ""}`}
+              onClick={handleAddToCart}
+              disabled={isAdded}
+          >
+              {isAdded ? "✓ Added to cart!" : "Add to cart"}
+         </button>
         </div>
       </div>
     </div>
