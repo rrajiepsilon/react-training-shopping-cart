@@ -31,7 +31,8 @@ export function buildRegisterPayload(form: RegisterFormData): RegisterPayload {
     ? `${form.city.trim()}, ${form.state.trim()}`
     : form.city.trim();
   const localPart = form.email.split('@')[0] || 'user';
-  const username = localPart.replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 20) || 'user';
+  const username =
+    localPart.replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 20) || 'user';
 
   return {
     email: form.email.trim(),
@@ -55,7 +56,9 @@ export function buildRegisterPayload(form: RegisterFormData): RegisterPayload {
   };
 }
 
-export async function registerUser(form: RegisterFormData): Promise<RegisteredUser> {
+export async function registerUser(
+  form: RegisterFormData,
+): Promise<RegisteredUser> {
   const response = await fetch(USERS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

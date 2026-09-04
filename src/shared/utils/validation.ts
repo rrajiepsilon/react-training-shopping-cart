@@ -27,13 +27,15 @@ export function validateAge(age: string): string {
 
 export function validateEmail(email: string): string {
   if (!email.trim()) return 'Email is required';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Enter a valid email address';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return 'Enter a valid email address';
   return '';
 }
 
 export function validatePhone(phone: string): string {
   if (!phone.trim()) return 'Phone is required';
-  if (!/^\+?[\d\s\-()]{10,}$/.test(phone.trim())) return 'Enter a valid phone number';
+  if (!/^\+?[\d\s\-()]{10,}$/.test(phone.trim()))
+    return 'Enter a valid phone number';
   return '';
 }
 

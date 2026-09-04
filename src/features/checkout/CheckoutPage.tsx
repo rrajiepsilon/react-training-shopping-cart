@@ -70,7 +70,14 @@ export default function CheckoutPage() {
           <div className="card">
             <div className="card-title-row">
               <div className="card-title">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
@@ -95,7 +102,14 @@ export default function CheckoutPage() {
           <div className="card">
             <div className="card-title-row">
               <div className="card-title">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
                   <rect x="1" y="3" width="15" height="13"></rect>
                   <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
                   <circle cx="5.5" cy="18.5" r="2.5"></circle>
@@ -107,8 +121,12 @@ export default function CheckoutPage() {
             <div className="delivery-option">
               <div className="radio-dot" />
               <div className="delivery-info">
-                <div className="delivery-date">{deliveryDate} — Standard delivery</div>
-                <div className="delivery-sub">Arrives within 3–5 business days</div>
+                <div className="delivery-date">
+                  {deliveryDate} — Standard delivery
+                </div>
+                <div className="delivery-sub">
+                  Arrives within 3–5 business days
+                </div>
               </div>
               <div className="delivery-price">Free</div>
             </div>
@@ -118,7 +136,14 @@ export default function CheckoutPage() {
           <div className="card">
             <div className="card-title-row">
               <div className="card-title">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                >
                   <rect x="1" y="4" width="22" height="16" rx="2"></rect>
                   <line x1="1" y1="10" x2="23" y2="10"></line>
                 </svg>
@@ -130,15 +155,21 @@ export default function CheckoutPage() {
               className={`pay-option ${paymentMethod === 'card' ? 'selected' : ''}`}
               onClick={() => setPaymentMethod('card')}
             >
-              <span className={`pay-radio ${paymentMethod === 'card' ? 'selected' : ''}`} />
-              <span className="pay-label">Credit / Debit card · ending in 4242</span>
+              <span
+                className={`pay-radio ${paymentMethod === 'card' ? 'selected' : ''}`}
+              />
+              <span className="pay-label">
+                Credit / Debit card · ending in 4242
+              </span>
             </button>
 
             <button
               className={`pay-option ${paymentMethod === 'cod' ? 'selected' : ''}`}
               onClick={() => setPaymentMethod('cod')}
             >
-              <span className={`pay-radio ${paymentMethod === 'cod' ? 'selected' : ''}`} />
+              <span
+                className={`pay-radio ${paymentMethod === 'cod' ? 'selected' : ''}`}
+              />
               <span className="pay-label">Cash on delivery</span>
             </button>
           </div>
@@ -158,7 +189,9 @@ export default function CheckoutPage() {
                   <div className="mini-name">{item.title}</div>
                   <div className="mini-qty">Qty {item.quantity}</div>
                 </div>
-                <div className="mini-price">${(item.price * item.quantity).toFixed(2)}</div>
+                <div className="mini-price">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </div>
               </div>
             ))}
 
@@ -181,12 +214,22 @@ export default function CheckoutPage() {
               <span>${total.toFixed(2)}</span>
             </div>
 
-            <button className="btn btn-primary place-order-btn" onClick={handlePlaceOrder}>
+            <button
+              className="btn btn-primary place-order-btn"
+              onClick={handlePlaceOrder}
+            >
               Place order
             </button>
 
             <div className="secure-note">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <rect x="3" y="11" width="18" height="11" rx="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
               </svg>

@@ -24,11 +24,21 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }: CartItemProps) {
       </div>
 
       <div className="cart-item__qty">
-        <button type="button" className="qty-btn" onClick={() => onDecrease(item.id)} aria-label="Decrease quantity">
+        <button
+          type="button"
+          className="qty-btn"
+          onClick={() => onDecrease(item.id)}
+          aria-label="Decrease quantity"
+        >
           −
         </button>
         <span className="qty-value">{item.quantity}</span>
-        <button type="button" className="qty-btn" onClick={() => onIncrease(item.id)} aria-label="Increase quantity">
+        <button
+          type="button"
+          className="qty-btn"
+          onClick={() => onIncrease(item.id)}
+          aria-label="Increase quantity"
+        >
           +
         </button>
       </div>

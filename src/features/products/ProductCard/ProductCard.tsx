@@ -18,7 +18,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         <h3 className="product-card-title">{product.title}</h3>
         <StarRating rate={product.rating.rate} count={product.rating.count} />
         <div className="product-card-footer">
-          <span className="product-card-price">${product.price.toFixed(2)}</span>
+          <span className="product-card-price">
+            ${product.price.toFixed(2)}
+          </span>
           {/* <button className="btn btn-primary product-card-btn">
             Add to cart
           </button> */}

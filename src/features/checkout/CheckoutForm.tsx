@@ -56,13 +56,17 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
   const showError = (field: CheckoutField): string | false =>
     (touched[field] || submitted) && errors[field];
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     if (!isCheckoutField(name)) return;
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleBlur = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleBlur = (
+    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name } = event.target;
     if (!isCheckoutField(name)) return;
     setTouched((current) => ({ ...current, [name]: true }));
@@ -80,10 +84,18 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
 
   if (success) {
     return (
-      <div className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-success">
+      <div
+        className="checkout-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="checkout-success"
+      >
         <div className="checkout-modal__panel">
           <h2 id="checkout-success">Order placed!</h2>
-          <p>Thank you, {form.fullName}. Your order has been submitted successfully.</p>
+          <p>
+            Thank you, {form.fullName}. Your order has been submitted
+            successfully.
+          </p>
           <button type="button" className="btn btn-primary" onClick={onClose}>
             Close
           </button>
@@ -93,11 +105,21 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
   }
 
   return (
-    <div className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+    <div
+      className="checkout-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="checkout-title"
+    >
       <div className="checkout-modal__panel">
         <div className="checkout-modal__header">
           <h2 id="checkout-title">Checkout</h2>
-          <button type="button" className="checkout-modal__close" onClick={onClose} aria-label="Close checkout">
+          <button
+            type="button"
+            className="checkout-modal__close"
+            onClick={onClose}
+            aria-label="Close checkout"
+          >
             ×
           </button>
         </div>
@@ -112,7 +134,9 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {showError('fullName') && <span className="field-error">{errors.fullName}</span>}
+            {showError('fullName') && (
+              <span className="field-error">{errors.fullName}</span>
+            )}
           </label>
 
           <label className="checkout-field">
@@ -124,7 +148,9 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {showError('email') && <span className="field-error">{errors.email}</span>}
+            {showError('email') && (
+              <span className="field-error">{errors.email}</span>
+            )}
           </label>
 
           <label className="checkout-field">
@@ -136,7 +162,9 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {showError('phone') && <span className="field-error">{errors.phone}</span>}
+            {showError('phone') && (
+              <span className="field-error">{errors.phone}</span>
+            )}
           </label>
 
           <label className="checkout-field">
@@ -148,7 +176,9 @@ function CheckoutForm({ onClose }: CheckoutFormProps) {
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {showError('address') && <span className="field-error">{errors.address}</span>}
+            {showError('address') && (
+              <span className="field-error">{errors.address}</span>
+            )}
           </label>
 
           <button type="submit" className="btn btn-primary">

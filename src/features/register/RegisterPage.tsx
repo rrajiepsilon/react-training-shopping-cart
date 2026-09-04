@@ -107,13 +107,17 @@ function RegisterPage() {
   const showError = (field: RegisterField): string | false =>
     (touched[field] || submitted) && errors[field];
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = event.target;
     if (!isRegisterField(name)) return;
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleBlur = (event: FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleBlur = (
+    event: FocusEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name } = event.target;
     if (!isRegisterField(name)) return;
     setTouched((current) => ({ ...current, [name]: true }));
@@ -133,7 +137,11 @@ function RegisterPage() {
       await registerUser(form);
       setSuccess(true);
     } catch (error: unknown) {
-      setSubmitError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : 'Registration failed. Please try again.',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -147,18 +155,29 @@ function RegisterPage() {
             <div className="register-success">
               <h2>Account created</h2>
               <p>
-                Welcome, {form.firstName}. Your Cartly account has been registered successfully.
+                Welcome, {form.firstName}. Your Cartly account has been
+                registered successfully.
               </p>
-              <button type="button" className="btn btn-primary" onClick={() => navigate('/')}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => navigate('/')}
+              >
                 Continue
               </button>
             </div>
           ) : (
             <>
               <h1 className="register-card__title">Create your account</h1>
-              <p className="register-card__subtitle">Fill in your details to register with Cartly.</p>
+              <p className="register-card__subtitle">
+                Fill in your details to register with Cartly.
+              </p>
 
-              <form className="register-form" onSubmit={handleSubmit} noValidate>
+              <form
+                className="register-form"
+                onSubmit={handleSubmit}
+                noValidate
+              >
                 <div className="register-row">
                   <label className="register-field">
                     <FieldLabel>First name</FieldLabel>
@@ -189,7 +208,9 @@ function RegisterPage() {
                       autoComplete="family-name"
                       aria-required="true"
                     />
-                    {showError('lastName') && <span className="field-error">{errors.lastName}</span>}
+                    {showError('lastName') && (
+                      <span className="field-error">{errors.lastName}</span>
+                    )}
                   </label>
                 </div>
 
@@ -207,7 +228,9 @@ function RegisterPage() {
                       onBlur={handleBlur}
                       aria-required="true"
                     />
-                    {showError('age') && <span className="field-error">{errors.age}</span>}
+                    {showError('age') && (
+                      <span className="field-error">{errors.age}</span>
+                    )}
                   </label>
 
                   <label className="register-field">
@@ -222,7 +245,9 @@ function RegisterPage() {
                       autoComplete="tel"
                       aria-required="true"
                     />
-                    {showError('phone') && <span className="field-error">{errors.phone}</span>}
+                    {showError('phone') && (
+                      <span className="field-error">{errors.phone}</span>
+                    )}
                   </label>
                 </div>
 
@@ -238,7 +263,9 @@ function RegisterPage() {
                     autoComplete="email"
                     aria-required="true"
                   />
-                  {showError('email') && <span className="field-error">{errors.email}</span>}
+                  {showError('email') && (
+                    <span className="field-error">{errors.email}</span>
+                  )}
                 </label>
 
                 <div className="register-section" aria-hidden="true">
@@ -257,7 +284,9 @@ function RegisterPage() {
                     autoComplete="address-line1"
                     aria-required="true"
                   />
-                  {showError('address1') && <span className="field-error">{errors.address1}</span>}
+                  {showError('address1') && (
+                    <span className="field-error">{errors.address1}</span>
+                  )}
                 </label>
 
                 <label className="register-field">
@@ -286,7 +315,9 @@ function RegisterPage() {
                       autoComplete="address-level2"
                       aria-required="true"
                     />
-                    {showError('city') && <span className="field-error">{errors.city}</span>}
+                    {showError('city') && (
+                      <span className="field-error">{errors.city}</span>
+                    )}
                   </label>
 
                   <label className="register-field">
@@ -310,7 +341,9 @@ function RegisterPage() {
                         </option>
                       ))}
                     </select>
-                    {showError('state') && <span className="field-error">{errors.state}</span>}
+                    {showError('state') && (
+                      <span className="field-error">{errors.state}</span>
+                    )}
                   </label>
                 </div>
 
@@ -327,7 +360,9 @@ function RegisterPage() {
                       autoComplete="postal-code"
                       aria-required="true"
                     />
-                    {showError('zip') && <span className="field-error">{errors.zip}</span>}
+                    {showError('zip') && (
+                      <span className="field-error">{errors.zip}</span>
+                    )}
                   </label>
                 </div>
 
@@ -338,7 +373,11 @@ function RegisterPage() {
                 )}
 
                 <div className="register-actions">
-                  <button type="submit" className="btn btn-primary" disabled={submitting}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={submitting}
+                  >
                     {submitting ? 'Registering…' : 'Register'}
                   </button>
                   <button

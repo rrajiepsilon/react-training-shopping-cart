@@ -6,20 +6,23 @@ interface UseFetchResult<T> {
   error: string | null;
 }
 
+interface FetchState<T> {
+  url: string | null | undefined;
+  data: T | null;
+  error: string | null;
+}
+
 export function useFetch<T>(url: string | null | undefined): UseFetchResult<T> {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(Boolean(url));
-  const [error, setError] = useState<string | null>(null);
+  const [state, setState] = useState<FetchState<T>>({
+    url: undefined,
+    data: null,
+    error: null,
+  });
 
   useEffect(() => {
-    if (!url) {
-      setLoading(false);
-      return;
-    }
+    if (!url) return;
 
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetch(url)
       .then((response) => {
@@ -28,14 +31,16 @@ export function useFetch<T>(url: string | null | undefined): UseFetchResult<T> {
       })
       .then((json) => {
         if (!cancelled) {
-          setData(json);
-          setLoading(false);
+          setState({ url, data: json, error: null });
         }
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          setError(error instanceof Error ? error.message : 'Request failed');
-          setLoading(false);
+          setState({
+            url,
+            data: null,
+            error: error instanceof Error ? error.message : 'Request failed',
+          });
         }
       });
 
@@ -44,5 +49,12 @@ export function useFetch<T>(url: string | null | undefined): UseFetchResult<T> {
     };
   }, [url]);
 
-  return { data, loading, error };
+  // Results belong to the url they were fetched for, so a url change reads as loading.
+  const settled = state.url === url;
+
+  return {
+    data: settled ? state.data : null,
+    error: settled ? state.error : null,
+    loading: Boolean(url) && !settled,
+  };
 }

@@ -9,14 +9,17 @@ import './ProductDetailsPage.css';
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const addItem = useCartStore((state) => state.addItem);
-  const { data: product, loading, error } = useFetch<Product>(
-    id ? `https://fakestoreapi.com/products/${id}` : null,
-  );
+  const {
+    data: product,
+    loading,
+    error,
+  } = useFetch<Product>(id ? `https://fakestoreapi.com/products/${id}` : null);
 
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
 
-  const decrement = () => setQuantity((currentQuantity) => Math.max(1, currentQuantity - 1));
+  const decrement = () =>
+    setQuantity((currentQuantity) => Math.max(1, currentQuantity - 1));
   const increment = () => setQuantity((currentQuantity) => currentQuantity + 1);
 
   const handleAddToCart = () => {
@@ -31,10 +34,15 @@ export default function ProductDetailsPage() {
     }, 1500);
   };
 
-  if (!id) return <div className="page-content error-banner">Couldn't load product.</div>;
+  if (!id)
+    return (
+      <div className="page-content error-banner">Couldn't load product.</div>
+    );
   if (loading) return <div className="page-content">Loading...</div>;
   if (error || !product) {
-    return <div className="page-content error-banner">Couldn't load product.</div>;
+    return (
+      <div className="page-content error-banner">Couldn't load product.</div>
+    );
   }
 
   return (

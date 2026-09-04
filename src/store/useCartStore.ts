@@ -1,5 +1,10 @@
 import { create } from 'zustand';
-import type { CartItem, CartState, CartTotals, CouponCode } from '../shared/types';
+import type {
+  CartItem,
+  CartState,
+  CartTotals,
+  CouponCode,
+} from '../shared/types';
 
 export const SHIPPING_COST = 4.99;
 const TAX_RATE = 0.08;
@@ -10,8 +15,14 @@ function getDiscount(subtotal: number, couponCode: CouponCode): number {
   return 0;
 }
 
-function calculateTotals(items: CartItem[], couponCode: CouponCode = ''): CartTotals {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+function calculateTotals(
+  items: CartItem[],
+  couponCode: CouponCode = '',
+): CartTotals {
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
   const discount = getDiscount(subtotal, couponCode);
   const taxable = Math.max(0, subtotal - discount);
   const tax = taxable * TAX_RATE;
@@ -42,7 +53,9 @@ export const useCartStore = create<CartState>()((set) => ({
       const existing = state.items.find((item) => item.id === product.id);
       const items = existing
         ? state.items.map((item) =>
-            item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item,
           )
         : [...state.items, { ...product, quantity }];
       return { items, ...calculateTotals(items, state.couponCode) };
@@ -59,7 +72,9 @@ export const useCartStore = create<CartState>()((set) => ({
       const item = state.items.find((entry) => entry.id === productId);
       if (!item) return state;
       const items = state.items.map((entry) =>
-        entry.id === productId ? { ...entry, quantity: entry.quantity + 1 } : entry,
+        entry.id === productId
+          ? { ...entry, quantity: entry.quantity + 1 }
+          : entry,
       );
       return { items, ...calculateTotals(items, state.couponCode) };
     }),
@@ -69,7 +84,9 @@ export const useCartStore = create<CartState>()((set) => ({
       const item = state.items.find((entry) => entry.id === productId);
       if (!item || item.quantity <= 1) return state;
       const items = state.items.map((entry) =>
-        entry.id === productId ? { ...entry, quantity: entry.quantity - 1 } : entry,
+        entry.id === productId
+          ? { ...entry, quantity: entry.quantity - 1 }
+          : entry,
       );
       return { items, ...calculateTotals(items, state.couponCode) };
     }),

@@ -78,7 +78,11 @@ function CartPage() {
           <div className="cartly-state">
             <h2>Your cart is empty</h2>
             <p>Add items to get started.</p>
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate('/')}
+            >
               Return to Home
             </button>
           </div>
@@ -95,13 +99,16 @@ function CartPage() {
               <input
                 type="search"
                 className="cartly-search"
+                aria-label="Search cart items"
                 placeholder="Search items..."
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
               />
 
               {filteredItems.length === 0 ? (
-                <p className="cartly-empty-search">No items match your search.</p>
+                <p className="cartly-empty-search">
+                  No items match your search.
+                </p>
               ) : (
                 <div className="cartly-item-list">
                   {filteredItems.map((item) => (
@@ -148,6 +155,7 @@ function CartPage() {
               <form className="coupon-form" onSubmit={handleApplyCoupon}>
                 <input
                   type="text"
+                  aria-label="Coupon code"
                   placeholder="Coupon code"
                   value={couponInput}
                   onChange={(event) => setCouponInput(event.target.value)}
@@ -156,7 +164,9 @@ function CartPage() {
                   Apply
                 </button>
               </form>
-              {couponMessage && <p className="coupon-message">{couponMessage}</p>}
+              {couponMessage && (
+                <p className="coupon-message">{couponMessage}</p>
+              )}
 
               <button
                 type="button"
@@ -165,7 +175,11 @@ function CartPage() {
               >
                 Proceed to Checkout
               </button>
-              <button type="button" className="btn btn-secondary btn-block" onClick={() => navigate('/')}>
+              <button
+                type="button"
+                className="btn btn-secondary btn-block"
+                onClick={() => navigate('/')}
+              >
                 Return to Home
               </button>
             </aside>
