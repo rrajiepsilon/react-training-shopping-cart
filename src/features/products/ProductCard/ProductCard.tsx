@@ -5,13 +5,26 @@ import './ProductCard.css';
 
 interface ProductCardProps {
   product: Product;
+  priority?: boolean;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  priority = false,
+}: ProductCardProps) {
   return (
     <Link to={`/product/${product.id}`} className="product-card">
       <div className="product-card-thumb">
-        <img src={product.image} alt={product.title} loading="lazy" />
+        {/* loading/fetchPriority must precede src: React assigns props in
+            order, and the browser starts the fetch as soon as src lands. */}
+        <img
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          src={product.image}
+          alt={product.title}
+          width="640"
+          height="640"
+        />
         <span className="product-card-category">{product.category}</span>
       </div>
       <div className="product-card-body">

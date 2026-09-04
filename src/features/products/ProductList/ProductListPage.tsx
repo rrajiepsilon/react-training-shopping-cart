@@ -6,6 +6,9 @@ import './ProductListPage.css';
 
 const PAGE_SIZE = 10;
 
+// Cards likely visible without scrolling; these images skip lazy loading.
+const ABOVE_FOLD_COUNT = 2;
+
 function ProductCardSkeleton() {
   return (
     <div className="skeleton-card">
@@ -112,8 +115,12 @@ export default function ProductListPage() {
             ? Array.from({ length: PAGE_SIZE }).map((_, index) => (
                 <ProductCardSkeleton key={index} />
               ))
-            : pagedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            : pagedProducts.map((product, index) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  priority={index < ABOVE_FOLD_COUNT}
+                />
               ))}
         </div>
       )}

@@ -3,8 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fakestoreapi.com" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>react-training</title>
+    <script>
+      // Starts the product API calls while the app bundle is still downloading.
+      // Without this the first product image cannot be discovered until the
+      // bundle has parsed and mounted, which dominates LCP on slow networks.
+      // Keep these URLs in sync with the useFetch callers in features/products.
+      if (window.location.pathname === '/') {
+        window.__PREFETCH__ = {};
+        [
+          'https://fakestoreapi.com/products',
+          'https://fakestoreapi.com/products/categories',
+        ].forEach(function (url) {
+          window.__PREFETCH__[url] = fetch(url)
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error('Request failed: ' + response.status);
+              }
+              return response.json();
+            })
+            .then(
+              function (data) {
+                return { data: data, error: null };
+              },
+              function (error) {
+                return { data: null, error: error.message || 'Request failed' };
+              },
+            );
+        });
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
