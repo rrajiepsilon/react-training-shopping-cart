@@ -1,0 +1,170 @@
+.confirm-empty {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.confirm-card {
+  max-width: 620px;
+  margin: 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  text-align: center;
+}
+
+.confirm-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px auto;
+}
+
+.confirm-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.confirm-subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0 0 26px 0;
+  line-height: 1.6;
+}
+
+.confirm-meta-row {
+  display: flex;
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+  padding: 18px 0;
+  margin-bottom: 26px;
+}
+
+.confirm-meta-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.confirm-meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+}
+
+.confirm-meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.confirm-section {
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.confirm-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0 0 10px 0;
+}
+
+.confirm-address {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-style: normal;
+}
+
+.confirm-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.confirm-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.confirm-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.confirm-item:first-child {
+  padding-top: 0;
+}
+
+.confirm-item-img {
+  width: 42px;
+  height: 42px;
+  background: var(--color-surface-muted);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.confirm-item-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.confirm-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.confirm-item-name {
+  font-size: 12px;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.confirm-item-qty {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.confirm-item-price {
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.confirm-btn-row {
+  display: flex;
+  gap: 12px;
+}
+
+.confirm-btn {
+  flex: 1;
+}
+
+@media (max-width: 560px) {
+  .confirm-meta-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .confirm-btn-row {
+    flex-direction: column;
+  }
+}

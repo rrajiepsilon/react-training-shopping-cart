@@ -1,53 +1,23 @@
 {
-  "name": "react-training",
+  "name": "cartly-ecommerce-poc",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run lint && npm run format:check && npm run typecheck && vite build",
-    "typecheck": "tsc -b --noEmit",
-    "lint": "npm run lint:ox && npm run lint:eslint",
-    "lint:ox": "oxlint",
-    "lint:eslint": "eslint .",
-    "lint:fix": "oxlint --fix && eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prepare": "husky",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "zustand": "^5.0.8",
-    "react-router-dom": "^6.23.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.0",
+    "react-helmet-async": "^2.0.4",
+    "zustand": "^4.5.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.6.0",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "oxlint": "^1.71.0",
-    "prettier": "^3.7.4",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.0",
-    "vite": "^8.1.1"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "oxlint",
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,css,scss,md,mdx,yaml,yml}": "prettier --write"
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.0"
   }
 }
