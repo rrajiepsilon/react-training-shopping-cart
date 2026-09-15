@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import Box from "@mui/material/Box";
 import Header from "./components/Header/Header.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary.jsx";
+import HomePage from "./pages/HomePage/HomePage.jsx";
 
-// Route-level code splitting — each page is only downloaded when the user visits it
-const HomePage = lazy(() => import("./pages/HomePage/HomePage.jsx"));
 const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage/ProductDetailPage.jsx"));
 const CartPage = lazy(() => import("./pages/CartPage/CartPage.jsx"));
 const CheckoutPage = lazy(() => import("./pages/CheckoutPage/CheckoutPage.jsx"));
@@ -15,21 +15,32 @@ const RegistrationPage = lazy(() => import("./pages/RegistrationPage/Registratio
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage.jsx"));
 const AccountPage = lazy(() => import("./pages/AccountPage/AccountPage.jsx"));
 
+function RouteFallback() {
+  return (
+    <Box
+      sx={{ display: "flex", justifyContent: "center", py: 8, color: "text.secondary" }}
+      role="status"
+      aria-label="Loading"
+    >
+      Loading...
+    </Box>
+  );
+}
+
 export default function App() {
   const location = useLocation();
 
   return (
-    <div className="app-shell">
-      {/* Accessibility: lets keyboard users jump past repeated header nav */}
+    <Box className="app-shell">
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
 
       <Header />
 
-      <main id="main-content" tabIndex={-1}>
+      <Box component="main" id="main-content" tabIndex={-1} sx={{ flex: 1 }}>
         <ErrorBoundary resetKey={location.pathname}>
-          <Suspense fallback={<div className="route-loading">Loading...</div>}>
+          <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
@@ -49,9 +60,9 @@ export default function App() {
             </Routes>
           </Suspense>
         </ErrorBoundary>
-      </main>
+      </Box>
 
       <Footer />
-    </div>
+    </Box>
   );
 }

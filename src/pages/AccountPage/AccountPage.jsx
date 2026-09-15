@@ -1,9 +1,21 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Avatar from "@mui/material/Avatar";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
 import { useAuthStore } from "../../store/useAuthStore.js";
-import "./AccountPage.css";
 
-// POC placeholder data — a real app would fetch this from an orders API
 const RECENT_ORDERS = [
   { id: "CART-100482", date: "28 Aug 2026", items: 3, status: "transit", total: 304.32 },
   { id: "CART-100455", date: "14 Aug 2026", items: 1, status: "delivered", total: 64.5 },
@@ -24,9 +36,11 @@ const DEFAULT_ADDRESS = {
 export default function AccountPage() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [section, setSection] = useState("dashboard");
 
   const initials = getInitials(user?.firstName, user?.lastName, user?.username);
-  const displayName = user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.username || "there";
+  const displayName =
+    user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.username || "there";
 
   const handleLogout = () => {
     logout();
@@ -34,104 +48,121 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="page-content">
+    <Container maxWidth="lg" sx={{ py: 3.5 }}>
       <Helmet>
         <title>My account — Cartly</title>
         <meta name="description" content="View your recent orders and manage your Cartly account." />
       </Helmet>
 
-      <h1 className="account-title">My account</h1>
-      <p className="account-subtitle">Manage your orders and profile.</p>
+      <Typography variant="h4" component="h1" gutterBottom>
+        My account
+      </Typography>
+      <Typography color="textSecondary" sx={{ mb: 3 }}>
+        Manage your orders and profile.
+      </Typography>
 
-      <div className="account-layout">
-        <aside className="side-col" aria-label="Account navigation">
-          <div className="profile-card">
-            <div className="profile-row">
-              <span className="avatar" aria-hidden="true">
-                {initials}
-              </span>
-              <div>
-                <div className="profile-name">{displayName}</div>
-                <div className="profile-email">{user?.email}</div>
-              </div>
-            </div>
-            <nav>
-              <button className="menu-item active" type="button" aria-current="page">
-                Dashboard
-              </button>
-              <button className="menu-item" type="button">
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <Paper variant="outlined" sx={{ p: 2 }} component="aside" aria-label="Account navigation">
+            <Stack direction="row" spacing={1.5} sx={{ mb: 2, px: 1, alignItems: "center" }}>
+              <Avatar>{initials}</Avatar>
+              <Box>
+                <Typography sx={{ fontWeight: 600 }}>{displayName}</Typography>
+                <Typography variant="caption" color="textSecondary">
+                  {user?.email}
+                </Typography>
+              </Box>
+            </Stack>
+            <List>
+              <ListItemButton selected={section === "dashboard"} onClick={() => setSection("dashboard")} aria-current={section === "dashboard" ? "page" : undefined}>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+              <ListItemButton selected={section === "profile"} onClick={() => setSection("profile")}>
+                <ListItemText primary="Profile" />
+              </ListItemButton>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemText primary="Logout" slotProps={{ primary: { color: "error" } }} />
+              </ListItemButton>
+            </List>
+          </Paper>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 9 }}>
+          {section === "profile" ? (
+            <Paper variant="outlined" sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
                 Profile
-              </button>
-              <button className="menu-item logout" type="button" onClick={handleLogout}>
-                Logout
-              </button>
-            </nav>
-          </div>
-        </aside>
+              </Typography>
+              <Typography color="textSecondary">
+                Profile editing is a placeholder in this POC. Use Dashboard to view recent orders.
+              </Typography>
+            </Paper>
+          ) : (
+            <Stack spacing={2}>
+              <Grid container spacing={2}>
+                {STATS.map((stat) => (
+                  <Grid key={stat.label} size={{ xs: 12, sm: 4 }}>
+                    <Paper variant="outlined" sx={{ p: 2 }}>
+                      <Typography variant="h5">{stat.value}</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {stat.label}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
 
-        <div className="main-col">
-          <div className="stat-row">
-            {STATS.map((stat) => (
-              <div className="stat-card" key={stat.label}>
-                <div className="stat-value">{stat.value}</div>
-                <div className="stat-label">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+              <Paper variant="outlined" component="section" aria-labelledby="recent-orders-heading" sx={{ p: 3 }}>
+                <Stack direction="row" sx={{ mb: 2, alignItems: "center", justifyContent: "space-between" }}>
+                  <Typography variant="h6" component="h2" id="recent-orders-heading">
+                    Recent orders
+                  </Typography>
+                  <Button size="small">View all</Button>
+                </Stack>
+                <Stack divider={<Divider />} spacing={1.5}>
+                  {RECENT_ORDERS.map((order) => (
+                    <Stack
+                      key={order.id}
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={1.5}
+                      sx={{ alignItems: { sm: "center" } }}
+                    >
+                      <Box sx={{ flex: 1 }}>
+                        <Typography sx={{ fontWeight: 600 }}>#{order.id}</Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {order.date} · {order.items} item{order.items === 1 ? "" : "s"}
+                        </Typography>
+                      </Box>
+                      <Chip
+                        size="small"
+                        color={order.status === "transit" ? "info" : "success"}
+                        label={order.status === "transit" ? "In transit" : "Delivered"}
+                      />
+                      <Typography sx={{ fontWeight: 600 }}>${order.total.toFixed(2)}</Typography>
+                    </Stack>
+                  ))}
+                </Stack>
+              </Paper>
 
-          <section className="card" aria-labelledby="recent-orders-heading">
-            <div className="card-header">
-              <h2 className="card-title" id="recent-orders-heading">
-                Recent orders
-              </h2>
-              <button className="view-all" type="button">
-                View all
-              </button>
-            </div>
-
-            <ul className="order-list">
-              {RECENT_ORDERS.map((order) => (
-                <li className="order-row" key={order.id}>
-                  <div className="order-thumb" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                      <path d="M21 15l-5-5L5 21"></path>
-                    </svg>
-                  </div>
-                  <div className="order-info">
-                    <div className="order-id">#{order.id}</div>
-                    <div className="order-meta">
-                      {order.date} · {order.items} item{order.items === 1 ? "" : "s"}
-                    </div>
-                  </div>
-                  <span className={`order-status ${order.status}`}>
-                    <span className="dot" aria-hidden="true"></span>
-                    {order.status === "transit" ? "In transit" : "Delivered"}
-                  </span>
-                  <div className="order-price">${order.total.toFixed(2)}</div>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="card" aria-labelledby="default-address-heading">
-            <div className="addr-label" id="default-address-heading">
-              Default address
-            </div>
-            <div className="addr-row">
-              <div>
-                <div className="addr-name">{DEFAULT_ADDRESS.name}</div>
-                <div className="addr-text">{DEFAULT_ADDRESS.line}</div>
-              </div>
-              <button className="edit-btn" type="button">
-                Edit
-              </button>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
+              <Paper variant="outlined" component="section" aria-labelledby="default-address-heading" sx={{ p: 3 }}>
+                <Typography variant="subtitle2" id="default-address-heading" color="textSecondary" gutterBottom>
+                  Default address
+                </Typography>
+                <Stack direction="row" sx={{ alignItems: "flex-start", justifyContent: "space-between" }}>
+                  <Box>
+                    <Typography sx={{ fontWeight: 600 }}>{DEFAULT_ADDRESS.name}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {DEFAULT_ADDRESS.line}
+                    </Typography>
+                  </Box>
+                  <Button size="small">Edit</Button>
+                </Stack>
+              </Paper>
+            </Stack>
+          )}
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

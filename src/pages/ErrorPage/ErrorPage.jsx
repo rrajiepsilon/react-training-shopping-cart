@@ -1,30 +1,38 @@
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import "./ErrorPage.css";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 
 export default function ErrorPage({ onRetry }) {
   const navigate = useNavigate();
 
   return (
-    <div className="page-content error-page">
+    <Container maxWidth="sm" sx={{ py: 6 }}>
       <Helmet>
         <title>Something went wrong — Cartly</title>
       </Helmet>
 
-      <div className="error-card" role="alert">
-        <h1 className="error-title">Something went wrong</h1>
-        <p className="error-message">Some error occurred, please contact admin.</p>
-        <div className="error-actions">
+      <Paper sx={{ p: 4 }} role="alert">
+        <Typography variant="h5" component="h1" gutterBottom>
+          Something went wrong
+        </Typography>
+        <Typography color="textSecondary" sx={{ mb: 3 }}>
+          Some error occurred, please contact admin.
+        </Typography>
+        <Stack direction="row" spacing={2}>
           {onRetry && (
-            <button type="button" className="btn btn-secondary" onClick={onRetry}>
+            <Button variant="outlined" onClick={onRetry}>
               Try again
-            </button>
+            </Button>
           )}
-          <button type="button" className="btn btn-primary" onClick={() => navigate("/")}>
+          <Button variant="contained" onClick={() => navigate("/")}>
             Return to Home
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Stack>
+      </Paper>
+    </Container>
   );
 }

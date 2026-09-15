@@ -1,6 +1,17 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import "./OrderConfirmationPage.css";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Avatar from "@mui/material/Avatar";
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function OrderConfirmationPage() {
   const location = useLocation();
@@ -8,97 +19,112 @@ export default function OrderConfirmationPage() {
   const order = location.state?.order;
 
   if (!order) {
-    // Direct navigation with no order in state — nothing to confirm
     return (
-      <div className="page-content">
+      <Container maxWidth="sm" sx={{ py: 6 }}>
         <Helmet>
           <title>Order confirmation — Cartly</title>
         </Helmet>
-        <div className="confirm-empty">
-          <h1>No recent order found</h1>
-          <p>
-            Looks like there's no order to show. <Link to="/">Go back to shopping</Link>.
-          </p>
-        </div>
-      </div>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          No recent order found
+        </Alert>
+        <Typography>
+          Looks like there's no order to show.{" "}
+          <Link component={RouterLink} to="/" underline="hover">
+            Go back to shopping
+          </Link>
+          .
+        </Typography>
+      </Container>
     );
   }
 
   return (
-    <div className="page-content">
+    <Container maxWidth="sm" sx={{ py: 4 }}>
       <Helmet>
         <title>Order confirmed — Cartly</title>
         <meta name="description" content="Your Cartly order has been placed successfully." />
       </Helmet>
 
-      <div className="confirm-card">
-        <div className="confirm-icon" aria-hidden="true">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
+      <Paper variant="outlined" sx={{ p: 4 }}>
+        <Avatar sx={{ bgcolor: "success.main", width: 56, height: 56, mb: 2 }}>
+          <CheckIcon fontSize="large" />
+        </Avatar>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Order placed!
+        </Typography>
+        <Typography color="textSecondary" sx={{ mb: 3 }}>
+          Thanks for shopping with Cartly. A confirmation has been sent for order <strong>#{order.orderId}</strong>.
+        </Typography>
 
-        <h1 className="confirm-title">Order placed!</h1>
-        <p className="confirm-subtitle">
-          Thanks for shopping with Cartly. A confirmation has been sent for order{" "}
-          <strong>#{order.orderId}</strong>.
-        </p>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Typography variant="caption" color="textSecondary">
+              Order number
+            </Typography>
+            <Typography sx={{ fontWeight: 600 }}>#{order.orderId}</Typography>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Typography variant="caption" color="textSecondary">
+              Estimated delivery
+            </Typography>
+            <Typography sx={{ fontWeight: 600 }}>{order.deliveryDate}</Typography>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Typography variant="caption" color="textSecondary">
+              Total paid
+            </Typography>
+            <Typography sx={{ fontWeight: 600 }}>${order.total.toFixed(2)}</Typography>
+          </Grid>
+        </Grid>
 
-        <div className="confirm-meta-row">
-          <div className="confirm-meta-item">
-            <span className="confirm-meta-label">Order number</span>
-            <span className="confirm-meta-value">#{order.orderId}</span>
-          </div>
-          <div className="confirm-meta-item">
-            <span className="confirm-meta-label">Estimated delivery</span>
-            <span className="confirm-meta-value">{order.deliveryDate}</span>
-          </div>
-          <div className="confirm-meta-item">
-            <span className="confirm-meta-label">Total paid</span>
-            <span className="confirm-meta-value">${order.total.toFixed(2)}</span>
-          </div>
-        </div>
+        <Typography variant="subtitle1" component="h2" gutterBottom>
+          Shipping to
+        </Typography>
+        <Typography component="address" variant="body2" color="textSecondary" sx={{ fontStyle: "normal", mb: 3 }}>
+          {order.address.name}
+          <br />
+          {order.address.line1}
+          <br />
+          {order.address.cityStateZip}
+          <br />
+          {order.address.country}
+        </Typography>
 
-        <div className="confirm-section">
-          <h2 className="confirm-section-title">Shipping to</h2>
-          <address className="confirm-address">
-            {order.address.name}
-            <br />
-            {order.address.line1}
-            <br />
-            {order.address.cityStateZip}
-            <br />
-            {order.address.country}
-          </address>
-        </div>
+        <Typography variant="subtitle1" component="h2" gutterBottom>
+          Items ({order.items.length})
+        </Typography>
+        <Stack spacing={1.5} component="ul" sx={{ listStyle: "none", p: 0, m: 0, mb: 3 }}>
+          {order.items.map((item) => (
+            <Stack component="li" key={item.id} direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
+              <Box
+                component="img"
+                src={item.image}
+                alt={item.title}
+                loading="lazy"
+                sx={{ width: 48, height: 48, objectFit: "contain" }}
+              />
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="body2">{item.title}</Typography>
+                <Typography variant="caption" color="textSecondary">
+                  Qty {item.quantity}
+                </Typography>
+              </Box>
+              <Typography variant="body2">${(item.price * item.quantity).toFixed(2)}</Typography>
+            </Stack>
+          ))}
+        </Stack>
 
-        <div className="confirm-section">
-          <h2 className="confirm-section-title">Items ({order.items.length})</h2>
-          <ul className="confirm-items">
-            {order.items.map((item) => (
-              <li className="confirm-item" key={item.id}>
-                <div className="confirm-item-img">
-                  <img src={item.image} alt={item.title} loading="lazy" />
-                </div>
-                <div className="confirm-item-info">
-                  <div className="confirm-item-name">{item.title}</div>
-                  <div className="confirm-item-qty">Qty {item.quantity}</div>
-                </div>
-                <div className="confirm-item-price">${(item.price * item.quantity).toFixed(2)}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Divider sx={{ mb: 3 }} />
 
-        <div className="confirm-btn-row">
-          <button className="btn btn-primary confirm-btn" onClick={() => navigate("/")}>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <Button variant="contained" onClick={() => navigate("/")}>
             Continue shopping
-          </button>
-          <button className="btn btn-secondary confirm-btn" onClick={() => navigate("/account")}>
+          </Button>
+          <Button variant="outlined" onClick={() => navigate("/account")}>
             View my orders
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Stack>
+      </Paper>
+    </Container>
   );
 }

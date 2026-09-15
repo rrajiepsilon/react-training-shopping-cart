@@ -1,9 +1,19 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link as RouterLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import { loginSchema, validateWithYup } from "../../validation/schemas.js";
 import { useAuthStore } from "../../store/useAuthStore.js";
-import "./LoginPage.css";
 
 const LOGIN_API_URL = "http://localhost:5000/api/login";
 
@@ -46,7 +56,6 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      // Expected shape: { user: { username, firstName, lastName, email }, token }
       login(data.user, data.token);
       navigate(redirectTo, { replace: true });
     } catch (err) {
@@ -61,89 +70,83 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="page-content login-page">
+    <Container maxWidth="sm" sx={{ py: 5 }}>
       <Helmet>
         <title>Sign in — Cartly</title>
         <meta name="description" content="Sign in to your Cartly account to check out faster and track your orders." />
       </Helmet>
 
-      <form className="form-card" onSubmit={handleSubmit} noValidate aria-labelledby="login-heading">
-        <h1 className="form-title" id="login-heading">
+      <Paper
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        aria-labelledby="login-heading"
+        variant="outlined"
+        sx={{ p: { xs: 3, sm: 4 } }}
+      >
+        <Typography variant="h4" component="h1" id="login-heading" gutterBottom>
           Welcome back
-        </h1>
-        <p className="form-subtitle">Sign in to your Cartly account.</p>
+        </Typography>
+        <Typography color="textSecondary" sx={{ mb: 3 }}>
+          Sign in to your Cartly account.
+        </Typography>
 
         {apiError && (
-          <div className="api-error" role="alert">
+          <Alert severity="error" sx={{ mb: 2 }}>
             {apiError}
-          </div>
+          </Alert>
         )}
 
-        <div className="field">
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            autoComplete="username"
-            placeholder="johndoe"
-            value={form.username}
-            onChange={handleChange}
-            className={errors.username ? "input-error" : ""}
-            aria-invalid={Boolean(errors.username)}
-            aria-describedby={errors.username ? "username-error" : undefined}
-          />
-          {errors.username && (
-            <span className="field-error" id="username-error" role="alert">
-              {errors.username}
-            </span>
-          )}
-        </div>
+        <TextField
+          id="username"
+          name="username"
+          label="Username"
+          autoComplete="username"
+          placeholder="johndoe"
+          value={form.username}
+          onChange={handleChange}
+          error={Boolean(errors.username)}
+          helperText={errors.username}
+          fullWidth
+          sx={{ mb: 2 }}
+        />
 
-        <div className="field">
-          <div className="field-label-row">
-            <label htmlFor="password">Password</label>
-            {/* POC placeholder — no forgot-password flow built yet */}
-            <button type="button" className="forgot-link">
-              Forgot password?
-            </button>
-          </div>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={handleChange}
-            className={errors.password ? "input-error" : ""}
-            aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? "password-error" : undefined}
-          />
-          {errors.password && (
-            <span className="field-error" id="password-error" role="alert">
-              {errors.password}
-            </span>
-          )}
-        </div>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 0.5 }}>
+          <Button type="button" size="small">
+            Forgot password?
+          </Button>
+        </Box>
+        <TextField
+          id="password"
+          name="password"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          value={form.password}
+          onChange={handleChange}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          fullWidth
+          sx={{ mb: 1 }}
+        />
 
-        <label className="remember-row">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <span>Remember me</span>
-        </label>
+        <FormControlLabel
+          control={<Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />}
+          label="Remember me"
+          sx={{ mb: 2 }}
+        />
 
-        <button type="submit" className="btn btn-primary signin-btn" disabled={submitting}>
-          {submitting ? "Signing in..." : "Sign in"}
-        </button>
+        <Button type="submit" variant="contained" fullWidth disabled={submitting} sx={{ mb: 2 }}>
+          {submitting ? <CircularProgress size={22} color="inherit" /> : "Sign in"}
+        </Button>
 
-        <p className="signup-note">
-          New to Cartly? <Link to="/register"><b>Create an account</b></Link>
-        </p>
-      </form>
-    </div>
+        <Typography variant="body2" sx={{ textAlign: "center" }}>
+          New to Cartly?{" "}
+          <Link component={RouterLink} to="/register" underline="hover" sx={{ fontWeight: 600 }}>
+            Create an account
+          </Link>
+        </Typography>
+      </Paper>
+    </Container>
   );
 }

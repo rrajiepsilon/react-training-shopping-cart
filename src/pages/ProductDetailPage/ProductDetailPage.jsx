@@ -1,28 +1,47 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import CheckIcon from "@mui/icons-material/Check";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { useFetch } from "../../hooks/useFetch.js";
 import { useCartStore } from "../../store/useCartStore.js";
 import StarRating from "../../components/StarRating/StarRating.jsx";
-import "./ProductDetailPage.css";
+import { optimizedProductImage } from "../../utils/productImage.js";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const addItem = useCartStore((state) => state.addItem);
 
-  const { data: product, loading, error } = useFetch(
-    `https://fakestoreapi.com/products/${id}`
-  );
+  const { data: product, loading, error } = useFetch(`https://fakestoreapi.com/products/${id}`);
 
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const [imageSrc, setImageSrc] = useState("");
   const addedTimeoutRef = useRef(null);
 
-  // Reset the "just added" button state if the user navigates to a different product
   useEffect(() => {
     return () => clearTimeout(addedTimeoutRef.current);
   }, [id]);
+
+  useEffect(() => {
+    if (product?.image) setImageSrc(optimizedProductImage(product.image, 800));
+  }, [product]);
 
   const decrement = () => setQuantity((q) => Math.max(1, q - 1));
   const increment = () => setQuantity((q) => q + 1);
@@ -30,8 +49,6 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (!product) return;
     addItem(product, quantity);
-
-    // Button micro-feedback: flip to a confirmed "Added" state briefly
     setJustAdded(true);
     clearTimeout(addedTimeoutRef.current);
     addedTimeoutRef.current = setTimeout(() => setJustAdded(false), 1600);
@@ -44,119 +61,135 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="page-content">
-        <p>Loading product...</p>
-      </div>
+      <Container maxWidth="lg" sx={{ py: 6, display: "flex", justifyContent: "center" }}>
+        <CircularProgress aria-label="Loading product" />
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="page-content">
-        <p role="alert">Couldn't load product: {error}</p>
-      </div>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Alert severity="error">Couldn't load product: {error}</Alert>
+      </Container>
     );
   }
 
   if (!product) return null;
 
   return (
-    <div className="page-content">
+    <Container maxWidth="lg" sx={{ py: 3.5 }}>
       <Helmet>
         <title>{`${product.title} — Cartly`}</title>
         <meta name="description" content={product.description.slice(0, 155)} />
       </Helmet>
 
-      <nav className="breadcrumb" aria-label="Breadcrumb">
-        <Link to="/">Home</Link> / <span className="capitalize">{product.category}</span> /{" "}
-        <span className="current" aria-current="page">
+      <Breadcrumbs aria-label="Breadcrumb" sx={{ mb: 3 }}>
+        <Link component={RouterLink} to="/" color="inherit" underline="hover">
+          Home
+        </Link>
+        <Typography sx={{ textTransform: "capitalize" }}>{product.category}</Typography>
+        <Typography color="textPrimary" aria-current="page">
           {product.title}
-        </span>
-      </nav>
+        </Typography>
+      </Breadcrumbs>
 
-      <div className="detail-layout">
-        <div className="gallery">
-          <div className="main-img">
-            <img src={product.image} alt={product.title} />
-          </div>
-        </div>
+      <Grid container spacing={4}>
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Paper
+            variant="outlined"
+            sx={{ p: 4, display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "grey.50" }}
+          >
+            <Box
+              component="img"
+              src={imageSrc || product.image}
+              alt={product.title}
+              width={420}
+              height={420}
+              fetchPriority="high"
+              decoding="async"
+              onError={() => setImageSrc(product.image)}
+              sx={{ maxWidth: "100%", maxHeight: 420, width: "auto", height: "auto", objectFit: "contain" }}
+            />
+          </Paper>
+        </Grid>
 
-        <div className="detail-info">
-          <div className="category-tag">{product.category}</div>
-          <h1 className="detail-title">{product.title}</h1>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Chip label={product.category} size="small" sx={{ textTransform: "capitalize", mb: 1.5 }} />
+          <Typography variant="h4" component="h1" gutterBottom>
+            {product.title}
+          </Typography>
+          <StarRating rate={product.rating.rate} count={product.rating.count} size="medium" />
+          <Typography variant="h5" sx={{ my: 2 }}>
+            ${product.price.toFixed(2)}
+          </Typography>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+            Description
+          </Typography>
+          <Typography color="textSecondary" sx={{ mb: 3 }}>
+            {product.description}
+          </Typography>
 
-          <StarRating rate={product.rating.rate} count={product.rating.count} size={14} />
+          <Typography variant="body2" id="qty-label" sx={{ mb: 1 }}>
+            Quantity
+          </Typography>
+          <Box
+            role="group"
+            aria-labelledby="qty-label"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              border: 1,
+              borderColor: "divider",
+              borderRadius: 1,
+              overflow: "hidden",
+              mb: 3,
+            }}
+          >
+            <IconButton
+              onClick={decrement}
+              disabled={quantity <= 1}
+              aria-label="Decrease quantity"
+              size="small"
+              sx={{ borderRadius: 0 }}
+            >
+              <RemoveIcon />
+            </IconButton>
+            <Typography
+              aria-live="polite"
+              sx={{
+                width: 48,
+                textAlign: "center",
+                borderLeft: 1,
+                borderRight: 1,
+                borderColor: "divider",
+                alignSelf: "stretch",
+                lineHeight: "38px",
+              }}
+            >
+              {quantity}
+            </Typography>
+            <IconButton onClick={increment} aria-label="Increase quantity" size="small" sx={{ borderRadius: 0 }}>
+              <AddIcon />
+            </IconButton>
+          </Box>
 
-          <p className="detail-price">${product.price.toFixed(2)}</p>
-
-          <h2 className="desc-label">Description</h2>
-          <p className="detail-desc">{product.description}</p>
-
-          <div className="qty-row">
-            <span className="qty-label" id="qty-label">
-              Quantity
-            </span>
-            <div className="qty-box" role="group" aria-labelledby="qty-label">
-              <button onClick={decrement} aria-label="Decrease quantity">
-                &minus;
-              </button>
-              <span className="qty-num" aria-live="polite">
-                {quantity}
-              </span>
-              <button onClick={increment} aria-label="Increase quantity">
-                +
-              </button>
-            </div>
-          </div>
-
-          <div className="btn-row">
-            <button
-              className={`btn btn-secondary detail-btn add-to-cart-btn ${justAdded ? "added" : ""}`}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <Button
+              variant="outlined"
+              startIcon={justAdded ? <CheckIcon /> : <ShoppingCartOutlinedIcon />}
               onClick={handleAddToCart}
               disabled={justAdded}
+              color={justAdded ? "success" : "primary"}
             >
-              {justAdded ? (
-                <>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    style={{ marginRight: 8 }}
-                    aria-hidden="true"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Added
-                </>
-              ) : (
-                <>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    style={{ marginRight: 8 }}
-                    aria-hidden="true"
-                  >
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                  </svg>
-                  Add to cart
-                </>
-              )}
-            </button>
-            <button className="btn btn-primary detail-btn" onClick={handleBuyNow}>
+              {justAdded ? "Added" : "Add to cart"}
+            </Button>
+            <Button variant="contained" onClick={handleBuyNow}>
               Buy now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
