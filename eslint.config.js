@@ -37,6 +37,9 @@ export default tseslint.config(
         },
       },
     },
+    rules: {
+      'react-hooks/set-state-in-effect': 'off',
+    },
   },
   eslintConfigPrettier,
 );
