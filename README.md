@@ -107,13 +107,22 @@ src/
 
 ```bash
 npm install
-npm run dev
+npm --prefix server install
 ```
 
-To exercise Login/Registration end-to-end, run a local API on port 5000 with
-matching `/api/register` and `/api/login` routes, or point the two
-`*_API_URL` constants near the top of `RegistrationPage.jsx` / `LoginPage.jsx`
-at your own backend.
+Then start the storefront and the account API in two terminals:
+
+```bash
+npm run dev
+npm run dev:api
+```
+
+- React (Vite): `http://localhost:5173`
+- Account API: `http://localhost:5000` (`POST /api/register`, `POST /api/login`)
+
+The API lives in `server/` (Express). Registered users are stored in
+`server/data/users.txt` (created on first run; not committed). See
+`server/README.md` for request/response shapes.
 
 ## Notes / next steps for the team demo
 

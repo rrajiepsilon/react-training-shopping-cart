@@ -1,7 +1,6 @@
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -48,20 +47,27 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <Container maxWidth="lg" sx={{ py: 3.5 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 3.5,
+          minHeight: "60vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
+      >
         <Helmet>
           <title>Your cart — Cartly</title>
         </Helmet>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Your cart
+        <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 3 }}>
+          Your cart is empty
         </Typography>
-        <Typography color="textSecondary">
-          Your cart is empty.{" "}
-          <Link component={RouterLink} to="/" underline="hover">
-            Continue shopping
-          </Link>
-          .
-        </Typography>
+        <Button variant="contained" onClick={() => navigate("/")}>
+          Continue shopping
+        </Button>
       </Container>
     );
   }

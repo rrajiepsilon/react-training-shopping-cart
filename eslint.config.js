@@ -14,6 +14,7 @@ export default tseslint.config(
       '**/dist-ssr/**',
       '**/build/**',
       '**/coverage/**',
+      'server/**',
     ],
   },
   js.configs.recommended,

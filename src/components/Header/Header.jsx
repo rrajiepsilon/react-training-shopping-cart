@@ -19,12 +19,21 @@ export default function Header() {
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ gap: 2, minHeight: 64 }}>
+        <Toolbar
+          disableGutters
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
+            alignItems: "center",
+            gap: 2,
+            minHeight: 64,
+          }}
+        >
           <Typography
             component={Link}
             to="/"
             variant="h6"
-            sx={{ color: "inherit", textDecoration: "none", fontWeight: 700, letterSpacing: 0.3, mr: 1 }}
+            sx={{ color: "inherit", textDecoration: "none", fontWeight: 700, letterSpacing: 0.3, justifySelf: "start" }}
           >
             Cartly
           </Typography>
@@ -32,7 +41,12 @@ export default function Header() {
           <Box
             component="nav"
             aria-label="Main navigation"
-            sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", gap: 0.5, flex: 1 }}
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 0.5,
+            }}
           >
             <Button color="inherit" component={Link} to="/" size="small">
               Home
@@ -45,7 +59,7 @@ export default function Header() {
             </Typography>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: "auto" }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.5 }}>
             {isAuthenticated ? (
               <UserMenu />
             ) : (
